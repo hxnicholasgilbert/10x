@@ -35,7 +35,7 @@ That's it. xnet reads the ticket, confirms which repos are involved, sets up bra
 git clone git@github.com:hxnicholasgilbert/10x.git ~/.claude/skills/xnet
 ```
 
-That's all. On your first `/xnet` run, the skill bootstraps `~/xnet/config/` from the bundled defaults automatically.
+That's all. On your first `/xnet` run, the skill bootstraps an `~/xnet/` workspace in your home directory — this is where your ticket workspaces, repo registry, and personal config live.
 
 ---
 
