@@ -30,13 +30,11 @@ That's it. xnet reads the ticket, confirms which repos are involved, sets up bra
 
 ## Install
 
-1. **Copy the skill into your Claude Code skills directory:**
+```bash
+git clone git@github.com:hxnicholasgilbert/10x.git ~/.claude/skills/xnet
+```
 
-   ```bash
-   cp -r xnet ~/.claude/skills/xnet
-   ```
-
-2. **That's all.** On your first `/xnet` run, the skill bootstraps `~/xnet/config/` from the bundled defaults automatically.
+That's all. On your first `/xnet` run, the skill bootstraps `~/xnet/config/` from the bundled defaults automatically.
 
 ---
 
