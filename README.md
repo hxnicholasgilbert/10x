@@ -19,7 +19,7 @@ That's it. xnet reads the ticket, confirms which repos are involved, sets up bra
 | [Claude Code](https://claude.ai/code) | CLI or desktop app |
 | Jira MCP | Connect via `/mcp` → Atlassian. Required — xnet can't read tickets without it. |
 | `git` | Must be on your PATH |
-| `gh` (GitHub CLI) | Required only for pushing PRs. Install: `brew install gh` |
+| `gh` (GitHub CLI) *(optional)* | Required only for pushing PRs. Install: `brew install gh` |
 | Figma MCP *(optional)* | Connect via `/mcp` → Figma. Enables design context in ticket-breakdown.md for design tickets. |
 
 ---
