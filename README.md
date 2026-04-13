@@ -5,6 +5,7 @@
 Every engineer has limited bandwidth — the hardest part of a ticket isn't the code, it's honing in on the context. 
 
 **10x** does that heavy lifting for you.
+Run multiple tickets in parallel and 10x your output!
 
 ## Usage
 
