@@ -1,11 +1,15 @@
-# xnet
+# Introducing 10x, internally known as `xnet`
 
 > Turn a Jira ticket ID into a fully scaffolded engineering workspace in one command.
+
+Every engineer has limited bandwidth — the hardest part of a ticket isn't the code, it's honing in on the context. 
+
+**10x** does that heavy lifting for you.
 
 ## Usage
 
 ```
-/xnet PD-3494
+/xnet <Jira ID>
 ```
 
 That's it. xnet reads the ticket, confirms which repos are involved, sets up branches, and hands off to an Engineer agent that investigates the codebase, makes changes, and writes a PR description — ready to push.
@@ -39,7 +43,7 @@ That's it. xnet reads the ticket, confirms which repos are involved, sets up bra
 ## What happens when you run it
 
 ```
-/xnet PD-3494
+/xnet PD-XXXX
 ```
 
 | Phase | What it does |
@@ -47,8 +51,8 @@ That's it. xnet reads the ticket, confirms which repos are involved, sets up bra
 | 📋 Read ticket | Connects to Jira, reads the full ticket and acceptance criteria |
 | 🎨 Design context *(if Figma link found)* | Asks if you want to pull frame/component specs from Figma |
 | 🗂️ Confirm repos | Surfaces context clues from the ticket + known repos from past runs. You confirm which repos are involved. |
-| 🗂️ Create workspace | Writes `~/xnet/tickets/PD-3494/ticket.md` and `ticket-breakdown.md` — a plain-English brief with diagrams, scope table, and acceptance criteria |
-| ⚙️ Set up repos | Finds each repo locally (git worktree) or clones it. Creates a branch named `PD-3494` from `origin/staging`. |
+| 🗂️ Create workspace | Writes `~/xnet/tickets/PD-XXXX/ticket.md` and `ticket-breakdown.md` — a plain-English brief with diagrams, scope table, and acceptance criteria |
+| ⚙️ Set up repos | Finds each repo locally (git worktree) or clones it. Creates a branch named `PD-XXXX` from `origin/staging`. |
 | 🤖 Engineer agent | Investigates the codebase, makes changes, commits atomically, writes `proposed-solution.md` |
 | 🚀 Push PR *(optional)* | Asks if you want to open a PR. Uses `proposed-solution.md` as the description. |
 
@@ -66,12 +70,12 @@ After a run, your workspace looks like:
 │   ├── commit-style.md
 │   └── repos.json               ← registry of repos xnet has used
 └── tickets/
-    └── PD-3494/
+    └── PD-XXXX/
         ├── ticket.md            ← raw Jira content
         ├── ticket-breakdown.md  ← plain-English brief + Engineer progress
         ├── WORKSPACE.md         ← absolute paths for the Engineer agent
         ├── proposed-solution.md ← PR description (written when Engineer is done)
-        └── my-repo/             ← git worktree or clone on branch PD-3494
+        └── my-repo/             ← git worktree or clone on branch PD-XXXX
 ```
 
 ---
