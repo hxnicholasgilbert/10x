@@ -66,8 +66,12 @@ If repo already exists in the file: update `last_used`, append `TICKET_ID` to `t
 ```bash
 WORKTREE_PATH="$HOME/xnet/tickets/<TICKET_ID>/<repo-name>"
 
-# 1. Clone into ticket workspace
-git clone <url> "$WORKTREE_PATH"
+# 1. Clone into ticket workspace (use gh if available, fallback to git)
+if command -v gh >/dev/null 2>&1; then
+  gh repo clone <url> "$WORKTREE_PATH"
+else
+  git clone <url> "$WORKTREE_PATH"
+fi
 cd "$WORKTREE_PATH"
 
 # 2. Determine base branch

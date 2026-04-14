@@ -160,7 +160,9 @@ Would you like to:
 - Discuss a specific part of the solution?
 - Ask the Engineer agent to revise an approach?
 - Review the commits on branch <TICKET_ID>?
-- **Push a PR?** I'll open a pull request using proposed-solution.md as the description.
+- **Push a PR?** I'll open a draft PR, run QA/security/code review agents in parallel, and post their findings as PR comments.
+- **Handle review feedback?** Run `/xnet review <TICKET_ID>` after your PR gets reviewed — I'll read the comments, apply changes, and reply.
 ```
 
 If the user says yes to pushing a PR → proceed to `phases/06-pr.md`.
+If the user wants to handle review feedback → proceed to `phases/07-review.md`.

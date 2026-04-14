@@ -5,7 +5,9 @@ description: Ticket workspace builder. Given a Jira ticket ID, reads the ticket 
 
 # xnet — Ticket Workspace Skill
 
-**Trigger:** User provides a Jira ticket ID (e.g. `PD-3494`) or invokes `/xnet <TICKET-ID>`.
+**Triggers:**
+- `/xnet <TICKET-ID>` — full workspace build (Phases 1–6)
+- `/xnet review <TICKET-ID>` — handle PR review feedback (Phase 7)
 
 ---
 
@@ -53,7 +55,8 @@ Execute each phase in order. Read the linked phase file for full instructions.
 | 3 | `phases/03-workspace.md` | Create workspace dir, write ticket.md + ticket-breakdown.md |
 | 4 | `phases/04-git.md` | Set up each repo via worktree or clone, update registry |
 | 5 | `phases/05-engineer-agent.md` | Write WORKSPACE.md, spawn Engineer agent |
-| 6 | `phases/06-pr.md` | Push branch + open PR (only if user requests) |
+| 6 | `phases/06-pr.md` | Quick checks, push draft PR, parallel agent comments, mark ready |
+| 7 | `phases/07-review.md` | Read PR review comments, apply changes, reply — triggered by `/xnet review <TICKET-ID>` |
 
 ---
 
