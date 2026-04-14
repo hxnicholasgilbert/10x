@@ -90,7 +90,9 @@ Wait for confirmation.
 
 ## Step 4 — Apply changes
 
-For each must-fix item, make the necessary code changes in the workspace repo using Edit/Write with absolute paths.
+Before making any change, read the relevant file and check whether the fix is already present in the code. If it is, note it as "already addressed" and skip to replying — do not apply a no-op change.
+
+For each must-fix item that needs a change, make the code changes using Edit/Write with absolute paths.
 
 After each logical group of changes, commit:
 ```bash
@@ -102,16 +104,20 @@ git -C /absolute/path/to/repo commit -m "[<TICKET_ID>] Address PR review feedbac
 
 ## Step 5 — Push and reply
 
-Push the updated branch:
+Push the updated branch (only if changes were committed):
 ```bash
 git -C /absolute/path/to/repo push origin <TICKET_ID>
 ```
 
-Reply to each resolved comment thread via the GitHub API:
+Reply to each resolved comment thread. Use the `in_reply_to` form — **not** the `/replies` endpoint (which returns 404). Requires `commit_id` (HEAD of the branch after push), `path`, and `line` from the original comment:
 ```bash
-gh api repos/<owner>/<repo>/pulls/comments/<comment_id>/replies \
+gh api repos/<owner>/<repo>/pulls/<PR_NUMBER>/comments \
   --method POST \
-  --field body="<reply — brief, specific: what was changed and where>"
+  --field in_reply_to=<comment_id> \
+  --field commit_id=<full_sha_of_head_commit> \
+  --field path=<file_path> \
+  --field line=<original_line_number> \
+  --field body="<reply — brief, specific: what was changed and where, or 'already addressed' if no change needed>"
 ```
 
 For questions the engineer needs to answer themselves, flag them clearly in chat rather than replying on their behalf.
