@@ -90,7 +90,7 @@ Wait for confirmation.
 
 ## Step 4 — Apply changes
 
-Before making any change, read the relevant file and check whether the fix is already present in the code. If it is, note it as "already addressed" and skip to replying — do not apply a no-op change.
+Read the relevant file before making changes. If the fix appears to already be present, note it — it may have been applied since the comment was written.
 
 For each must-fix item that needs a change, make the code changes using Edit/Write with absolute paths.
 
