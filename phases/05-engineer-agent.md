@@ -20,6 +20,12 @@ Write `~/xnet/tickets/<TICKET_ID>/WORKSPACE.md` using fully expanded absolute pa
 
 <3–5 sentence summary of what the ticket is asking for and key constraints>
 
+## Pull Requests
+
+| Repo | PR URL |
+|------|--------|
+| *(populated by Phase 6)* | |
+
 ## Files
 
 | File | Purpose |

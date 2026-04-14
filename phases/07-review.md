@@ -6,23 +6,40 @@ Triggered when the user says they want to handle review feedback, or invokes `/x
 
 ## Step 1 — Load workspace
 
-Read `~/xnet/tickets/<TICKET_ID>/WORKSPACE.md` to get repo paths and PR URL.
+Check that `~/xnet/tickets/<TICKET_ID>/WORKSPACE.md` exists. If it does not, halt:
 
-If PR URL is not in WORKSPACE.md, fetch it:
-```bash
-gh pr list --head <TICKET_ID> --json url --jq '.[0].url'
+```
+⚠️  No workspace found for <TICKET_ID>.
+   Run /xnet <TICKET_ID> first to set up the workspace.
 ```
 
-If no PR found, tell the user and halt.
+Read WORKSPACE.md and extract:
+- The **Repos** table → absolute paths and repo names
+- The **Pull Requests** table → one PR URL per repo
+
+For any repo missing a PR URL in WORKSPACE.md, attempt to find it:
+```bash
+gh pr list --head <TICKET_ID> --repo <owner>/<repo> --json url --jq '.[0].url'
+```
+
+If no PR is found for a repo, skip it and note it in the output.
+
+Output:
+```
+📂 Workspace: ~/xnet/tickets/<TICKET_ID>/
+   Repos with PRs: <N>
+   - <repo-name>: <PR_URL>
+   - <repo-name>: <PR_URL>
+```
 
 ---
 
 ## Step 2 — Fetch review feedback
 
-For each repo, fetch all PR review comments:
+**Repeat for each repo with a PR.** For each, fetch all review comments:
 
 ```bash
-# Review threads (inline code comments)
+# Inline code comments (line-specific)
 gh api repos/<owner>/<repo>/pulls/<PR_NUMBER>/comments
 
 # General review comments and approvals
@@ -32,7 +49,9 @@ gh pr view <PR_URL> --json reviews,comments
 Output:
 ```
 📬 Fetching review feedback for <TICKET_ID>...
-   <N> review comments found across <N> repos.
+   <repo-name>: <N> comments
+   <repo-name>: <N> comments
+   Total: <N> comments across <N> repos.
 ```
 
 ---
