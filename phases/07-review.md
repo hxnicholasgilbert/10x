@@ -6,27 +6,51 @@ Triggered when the user says they want to handle review feedback, or invokes `/x
 
 ## Step 1 — Load workspace
 
-Check that `~/xnet/tickets/<TICKET_ID>/WORKSPACE.md` exists. If it does not, halt:
+Check whether `~/xnet/tickets/<TICKET_ID>/WORKSPACE.md` exists.
 
-```
-⚠️  No workspace found for <TICKET_ID>.
-   Run /xnet <TICKET_ID> first to set up the workspace.
-```
+### If workspace exists
 
 Read WORKSPACE.md and extract:
 - The **Repos** table → absolute paths and repo names
 - The **Pull Requests** table → one PR URL per repo
 
-For any repo missing a PR URL in WORKSPACE.md, attempt to find it:
+For any repo missing a PR URL, attempt to find it:
 ```bash
 gh pr list --head <TICKET_ID> --repo <owner>/<repo> --json url --jq '.[0].url'
 ```
 
-If no PR is found for a repo, skip it and note it in the output.
+### If no workspace exists
 
-Output:
+No local workspace — try to discover PRs from Jira instead.
+
+Fetch the ticket's remote issue links via the Jira MCP (`getJiraIssueRemoteIssueLinks`). Look for GitHub PR URLs in the results.
+
+Present what was found and ask the user to confirm before proceeding:
+
 ```
-📂 Workspace: ~/xnet/tickets/<TICKET_ID>/
+⚠️  No local workspace found for <TICKET_ID>.
+
+   Found the following linked PRs on the Jira ticket:
+
+   Repo              Branch      PR URL
+   ──────────────────────────────────────────────────────
+   <repo-name>       <branch>    <PR_URL>
+   <repo-name>       <branch>    <PR_URL>
+
+   Are these correct? Anything missing or wrong?
+   Reply to confirm, correct, or add more PRs.
+```
+
+Wait for confirmation. Update the list based on the user's response.
+
+Note: without a local workspace, review comments can be fetched and replied to, but applying code changes will require cloning the repo first. If must-fix changes are needed, offer to set up the workspace via `/xnet <TICKET_ID>` or proceed read-only.
+
+---
+
+### Output (both paths)
+
+```
+📂 <TICKET_ID>
    Repos with PRs: <N>
    - <repo-name>: <PR_URL>
    - <repo-name>: <PR_URL>
