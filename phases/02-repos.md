@@ -6,28 +6,32 @@ Check whether `~/xnet/config/repos.json` exists and read it. This file tracks re
 
 If relevant entries exist, include them as pre-filled suggestions so the engineer can confirm rather than re-enter paths.
 
-## Step 2b — GitHub auto-search (optional)
+## Step 2b — GitHub repo search (optional)
 
-If `gh` is available, offer to scan GitHub for repos related to this ticket before asking the user to confirm manually:
+If `gh` is available, offer to search the org's repos using context from the ticket:
 
 ```
-Auto-search GitHub for repos linked to <TICKET_ID>?
-Scans for PRs and branches matching the ticket ID across the org. May take a moment.
+Search GitHub for repos related to this ticket?
+Uses ticket keywords to find likely repos across the org. May take a moment.
 y/n (enter to skip)
 ```
 
-If yes, run:
+If yes:
 
+**1. Extract keywords from the ticket** — pull out product names, service names, feature names, platform areas, and technology hints from the ticket summary and description. Aim for 3–6 specific terms (e.g. "parkcare", "llm-proxy", "closeout", "booking").
+
+**2. Search the org's repos:**
 ```bash
-# PRs mentioning the ticket ID
-gh search prs "<TICKET_ID>" --json repository,title,url --limit 10
+# List org repos with names and descriptions
+gh repo list <org> --json name,description,url --limit 100
 
-# Branches named after the ticket in known repos (from registry)
-# For each repo in repos.json:
-gh api repos/<owner>/<repo>/branches --jq '[.[] | select(.name | contains("<TICKET_ID>")) | {branch: .name, repo: "<repo>"}]'
+# For each keyword, search repos by name/description
+gh search repos "<keyword>" --owner <org> --json name,description,url --limit 10
 ```
 
-Collect any repos surfaced by either command into a candidate list. These are folded into the prompt in Step 2c as **GitHub matches** — the user confirms or removes them alongside registry entries.
+**3. Score and filter** — match repo names and descriptions against the extracted keywords. Keep repos where the name or description contains one or more keywords. Discard noise.
+
+Collect matches into a candidate list. These are folded into the prompt in Step 2c as **GitHub matches** — the user confirms or removes them alongside registry entries.
 
 If `gh` is not available or user skips, continue to Step 2c with registry entries only.
 
