@@ -6,7 +6,34 @@ Check whether `~/xnet/config/repos.json` exists and read it. This file tracks re
 
 If relevant entries exist, include them as pre-filled suggestions so the engineer can confirm rather than re-enter paths.
 
-## Step 2b — Single prompt: repos + Figma
+## Step 2b — GitHub auto-search (optional)
+
+If `gh` is available, offer to scan GitHub for repos related to this ticket before asking the user to confirm manually:
+
+```
+Auto-search GitHub for repos linked to <TICKET_ID>?
+Scans for PRs and branches matching the ticket ID across the org. May take a moment.
+y/n (enter to skip)
+```
+
+If yes, run:
+
+```bash
+# PRs mentioning the ticket ID
+gh search prs "<TICKET_ID>" --json repository,title,url --limit 10
+
+# Branches named after the ticket in known repos (from registry)
+# For each repo in repos.json:
+gh api repos/<owner>/<repo>/branches --jq '[.[] | select(.name | contains("<TICKET_ID>")) | {branch: .name, repo: "<repo>"}]'
+```
+
+Collect any repos surfaced by either command into a candidate list. These are folded into the prompt in Step 2c as **GitHub matches** — the user confirms or removes them alongside registry entries.
+
+If `gh` is not available or user skips, continue to Step 2c with registry entries only.
+
+---
+
+## Step 2c — Single prompt: repos + Figma
 
 Send **one** prompt combining repo confirmation and (if applicable) the Figma question. Do not split these into separate interactions.
 
@@ -29,7 +56,15 @@ Send **one** prompt combining repo confirmation and (if applicable) the Figma qu
 |------|-----------|-------|
 | parkcare | /Users/nick/code/parkcare | Parkcare platform — booking and details flow |
 
-Confirm which of these to include, or add new ones below.
+### GitHub matches (auto-found)
+[Include only if Step 2b surfaced results:]
+
+| Repo | Branch / PR |
+|------|------------|
+| tripapplite | branch: PD-3494 |
+| llm-fn-proxy | PR #854 — Add closeout RPC functions |
+
+Confirm which of these to include — add ✓ or ✗, or leave blank to skip.
 
 ### Additional repos
 | Repo name | Local path or clone URL |
