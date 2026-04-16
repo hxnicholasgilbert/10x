@@ -6,7 +6,38 @@ Check whether `~/xnet/config/repos.json` exists and read it. This file tracks re
 
 If relevant entries exist, include them as pre-filled suggestions so the engineer can confirm rather than re-enter paths.
 
-## Step 2b — Single prompt: repos + Figma
+## Step 2b — GitHub repo search (optional)
+
+If `gh` is available, offer to search the org's repos using context from the ticket:
+
+```
+Search GitHub for repos related to this ticket?
+Uses ticket keywords to find likely repos across the org. May take a moment.
+y/n (enter to skip)
+```
+
+If yes:
+
+**1. Extract keywords from the ticket** — pull out product names, service names, feature names, platform areas, and technology hints from the ticket summary and description. Aim for 3–6 specific terms (e.g. "parkcare", "llm-proxy", "closeout", "booking").
+
+**2. Search the org's repos:**
+```bash
+# List org repos with names and descriptions
+gh repo list <org> --json name,description,url --limit 100
+
+# For each keyword, search repos by name/description
+gh search repos "<keyword>" --owner <org> --json name,description,url --limit 10
+```
+
+**3. Score and filter** — match repo names and descriptions against the extracted keywords. Keep repos where the name or description contains one or more keywords. Discard noise.
+
+Collect matches into a candidate list. These are folded into the prompt in Step 2c as **GitHub matches** — the user confirms or removes them alongside registry entries.
+
+If `gh` is not available or user skips, continue to Step 2c with registry entries only.
+
+---
+
+## Step 2c — Single prompt: repos + Figma
 
 Send **one** prompt combining repo confirmation and (if applicable) the Figma question. Do not split these into separate interactions.
 
@@ -29,7 +60,15 @@ Send **one** prompt combining repo confirmation and (if applicable) the Figma qu
 |------|-----------|-------|
 | parkcare | /Users/nick/code/parkcare | Parkcare platform — booking and details flow |
 
-Confirm which of these to include, or add new ones below.
+### GitHub matches (auto-found)
+[Include only if Step 2b surfaced results:]
+
+| Repo | Branch / PR |
+|------|------------|
+| tripapplite | branch: PD-3494 |
+| llm-fn-proxy | PR #854 — Add closeout RPC functions |
+
+Confirm which of these to include — add ✓ or ✗, or leave blank to skip.
 
 ### Additional repos
 | Repo name | Local path or clone URL |
