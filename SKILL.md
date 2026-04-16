@@ -8,6 +8,8 @@ description: Ticket workspace builder. Given a Jira ticket ID, reads the ticket 
 **Triggers:**
 - `/xnet <TICKET-ID>` — full workspace build (Phases 1–6)
 - `/xnet review <TICKET-ID>` — handle PR review feedback (Phase 7)
+- `/xnet status` — overview of all active workspaces (Phase 8)
+- `/xnet cleanup <TICKET-ID>` — remove workspace and worktrees (Phase 9)
 
 ---
 
@@ -57,6 +59,8 @@ Execute each phase in order. Read the linked phase file for full instructions.
 | 5 | `phases/05-engineer-agent.md` | Write WORKSPACE.md, spawn Engineer agent |
 | 6 | `phases/06-pr.md` | Quick checks, push draft PR, parallel agent comments, mark ready |
 | 7 | `phases/07-review.md` | Read PR review comments, apply changes, reply — triggered by `/xnet review <TICKET-ID>` |
+| 8 | `phases/08-status.md` | Overview of all active workspaces — triggered by `/xnet status` |
+| 9 | `phases/09-cleanup.md` | Remove workspace, worktrees, update registry — triggered by `/xnet cleanup <TICKET-ID>` |
 
 ---
 
